@@ -3,23 +3,30 @@ package ph.hostev.paul.paginglibrarytry.paging;
 import android.arch.paging.ItemKeyedDataSource;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import ph.hostev.paul.paginglibrarytry.model.Model;
 import ph.hostev.paul.paginglibrarytry.util.MockUtil;
 
 public class ModelItemKeyedDataSource extends ItemKeyedDataSource<Integer, Model> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Model> callback) {
-        callback.onResult(MockUtil.mockItemKeyed(1, params.requestedLoadSize), 1, 500);
+        List<Model> models = MockUtil.mockItemKeyedAfter(1, params.requestedLoadSize);
+        callback.onResult(models, 1, 500);
     }
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Model> callback) {
-        callback.onResult(MockUtil.mockItemKeyedAfter(params.key, params.requestedLoadSize));
+        int nextKey = params.key + 1;
+        List<Model> models = MockUtil.mockItemKeyedAfter(nextKey, params.requestedLoadSize);
+        callback.onResult(models);
     }
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Model> callback) {
-        callback.onResult(MockUtil.mockItemKeyed(params.key, params.requestedLoadSize));
+        int prevKey = params.key - 1;
+        List<Model> models = MockUtil.mockItemKeyedBefore(prevKey, params.requestedLoadSize);
+        callback.onResult(models);
     }
 
     @NonNull

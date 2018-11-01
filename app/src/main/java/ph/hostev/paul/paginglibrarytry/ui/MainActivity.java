@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (adapter != null) {
-            addForDispose(listFlowable.subscribe(adapter::submitList));
+            addForDispose(listFlowable.subscribe(adapter::submitList, this::onError));
         }
     }
 
@@ -100,16 +100,21 @@ public class MainActivity extends AppCompatActivity {
                 listFlowable = pagedListFlowable(Class.forName(name));
                 button.setText(item.getTitle());
             } catch (ClassNotFoundException e) {
-                Toast.makeText(MainActivity.this, item.getTitle() + "can't be shown", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, item.getTitle() + " can't be shown", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, e.getMessage() + '\n' + e.getException());
             } finally {
                 if (adapter != null) {
-                    addForDispose(listFlowable.subscribe(adapter::submitList));
+                    addForDispose(listFlowable.subscribe(adapter::submitList, this::onError));
                 }
             }
             return true;
         });
         popup.show();
+    }
+
+    private void onError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+        Log.e(TAG, throwable.getMessage() + '\n' + throwable.fillInStackTrace());
     }
 
     protected final void addForDispose(@NonNull Disposable disposable) {

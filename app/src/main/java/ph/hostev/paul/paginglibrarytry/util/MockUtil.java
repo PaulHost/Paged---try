@@ -1,11 +1,18 @@
 package ph.hostev.paul.paginglibrarytry.util;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ph.hostev.paul.paginglibrarytry.model.Model;
 
 public final class MockUtil {
+    private static final String TAG = MockUtil.class.getCanonicalName();
+
+    @NonNull
     public static List<Model> mockPageKeyed(int page) {
         List<Model> models = new ArrayList<>();
         for (int i = 1; i < 101; i++) {
@@ -14,21 +21,34 @@ public final class MockUtil {
         return models;
     }
 
-    public static List<Model> mockItemKeyed(Integer key, int requestedLoadSize) {
+    @NonNull
+    public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
+        Log.d(TAG, "nextKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
-        key++;
-        for (; key < requestedLoadSize + key && models.size() < requestedLoadSize && key < 501; key++) {
+        for (; models.size() < requestedLoadSize && key < 501; key++) {
             models.add(new Model(key, " item=" + key));
         }
+        Log.d(TAG, "nextKey=" + key +
+                " modelsListSize=" + models.size() +
+                " requestedLoadSize=" + requestedLoadSize +
+                (models.size() > 1 ? " lastKey=" + models.get(models.size() - 1).getKey() : "")
+        );
         return models;
     }
 
-    public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
+    @NonNull
+    public static List<Model> mockItemKeyedBefore(Integer key, int requestedLoadSize) {
+        Log.d(TAG, "prevKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
-        key--;
-        for (; key > 0 && models.size() < requestedLoadSize + 1; key--) {
+        for (; key > 1 && models.size() < requestedLoadSize + 1; key--) {
             models.add(new Model(key, " item=" + key));
         }
+        Log.d(TAG, "prevKey=" + key +
+                " modelsListSize=" + models.size() +
+                " requestedLoadSize=" + requestedLoadSize +
+                (models.size() > 1 ? " lastKey=" + models.get(models.size() - 1).getKey() : "")
+        );
+        Collections.reverse(models);
         return models;
     }
 }
