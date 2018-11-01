@@ -67,16 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPageSize(100)
                 .build();
 
-        listFlowable = pagedListFlowable(ModelPageKeyedDataSource.class);
-        button.setText(ModelPageKeyedDataSource.class.getSimpleName());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (adapter != null) {
-            addForDispose(listFlowable.subscribe(adapter::submitList, this::onError));
-        }
+        button.setText(R.string.choose);
     }
 
     @NonNull

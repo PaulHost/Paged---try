@@ -22,6 +22,22 @@ public final class MockUtil {
     }
 
     @NonNull
+    public static List<Model> mockPositional(int position, int loadSize, int total) {
+        Log.d(TAG, "position=" + position + " loadSize=" + loadSize + " total=" + total);
+        List<Model> models = new ArrayList<>();
+        int gap = position + loadSize;
+        for (; position < gap && position < total; position++) {
+            models.add(new Model(position, "total=" + total));
+        }
+        Log.d(TAG, "position=" + position +
+                " loadSize=" + loadSize +
+                " total=" + total +
+                " modelsSize=" + models.size()
+        );
+        return models;
+    }
+
+    @NonNull
     public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
         Log.d(TAG, "nextKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();

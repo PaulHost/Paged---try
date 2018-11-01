@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Paging Library try</string>
     <string name="__">_</string>
+    <string name="choose">Choose DataSource</string>
 </resources>
