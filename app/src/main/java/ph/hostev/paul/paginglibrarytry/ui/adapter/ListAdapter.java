@@ -45,6 +45,8 @@ public class ListAdapter extends PagedListAdapter<Model, ListAdapter.ViewHolder>
         Model model = getItem(i);
         if (model != null) {
             holder.name.setText(String.format("%d key=%d %s", i + 1, model.getKey(), model.getName()));
+        } else {
+            holder.name.setText("... .... ... ...");
         }
     }
 

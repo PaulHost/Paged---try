@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
         }
 
-        config = new PagedList.Config.Builder().setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(25)
-                .setPrefetchDistance(50)
-                .setPageSize(100)
-                .build();
+        config = new PagedList.Config.Builder().setEnablePlaceholders(true)
+                                               .setInitialLoadSizeHint(25)
+                                               .setPrefetchDistance(50)
+                                               .setPageSize(100)
+                                               .build();
 
         button.setText(R.string.choose);
     }

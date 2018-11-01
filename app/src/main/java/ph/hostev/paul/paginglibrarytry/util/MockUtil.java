@@ -11,6 +11,7 @@ import ph.hostev.paul.paginglibrarytry.model.Model;
 
 public final class MockUtil {
     private static final String TAG = MockUtil.class.getCanonicalName();
+    private static final int SLEEP = 3000;
 
     @NonNull
     public static List<Model> mockPageKeyed(int page) {
@@ -25,6 +26,11 @@ public final class MockUtil {
     public static List<Model> mockPositional(int position, int loadSize, int total) {
         Log.d(TAG, "position=" + position + " loadSize=" + loadSize + " total=" + total);
         List<Model> models = new ArrayList<>();
+        try {
+            Thread.sleep(SLEEP);
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
         int gap = position + loadSize;
         for (; position < gap && position < total; position++) {
             models.add(new Model(position, "total=" + total));
@@ -41,6 +47,11 @@ public final class MockUtil {
     public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
         Log.d(TAG, "nextKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
+        try {
+            Thread.sleep(SLEEP);
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
         for (; models.size() < requestedLoadSize && key < 501; key++) {
             models.add(new Model(key, " item=" + key));
         }
