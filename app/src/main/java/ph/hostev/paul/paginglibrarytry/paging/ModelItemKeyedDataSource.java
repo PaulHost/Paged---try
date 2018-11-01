@@ -9,17 +9,17 @@ import ph.hostev.paul.paginglibrarytry.util.MockUtil;
 public class ModelItemKeyedDataSource extends ItemKeyedDataSource<Integer, Model> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Model> callback) {
-        callback.onResult(MockUtil.mock(1), 1, 500);
+        callback.onResult(MockUtil.mockItemKeyed(1, params.requestedLoadSize), 1, 500);
     }
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Model> callback) {
-        callback.onResult(MockUtil.mock(params.key));
+        callback.onResult(MockUtil.mockItemKeyedAfter(params.key, params.requestedLoadSize));
     }
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Model> callback) {
-        callback.onResult(MockUtil.mock(params.key));
+        callback.onResult(MockUtil.mockItemKeyed(params.key, params.requestedLoadSize));
     }
 
     @NonNull

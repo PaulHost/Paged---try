@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         listFlowable = pagedListFlowable(ModelPageKeyedDataSource.class);
+        button.setText(ModelPageKeyedDataSource.class.getSimpleName());
     }
 
     @Override
@@ -99,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 listFlowable = pagedListFlowable(Class.forName(name));
                 button.setText(item.getTitle());
             } catch (ClassNotFoundException e) {
+                Toast.makeText(MainActivity.this, item.getTitle() + "can't be shown", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, e.getMessage() + '\n' + e.getException());
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
             } finally {
                 if (adapter != null) {
                     addForDispose(listFlowable.subscribe(adapter::submitList));

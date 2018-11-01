@@ -9,11 +9,11 @@ import ph.hostev.paul.paginglibrarytry.util.MockUtil;
 public class ModelPositionalDataSource extends PositionalDataSource<Model> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Model> callback) {
-        callback.onResult(MockUtil.mock(1), 1);
+        callback.onResult(MockUtil.mockPageKeyed(1), 1);
     }
 
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<Model> callback) {
-        callback.onResult(MockUtil.mock(params.startPosition));
+        callback.onResult(MockUtil.mockPageKeyed(params.startPosition));
     }
 }
