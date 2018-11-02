@@ -5,9 +5,11 @@ import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -16,9 +18,26 @@ import ph.hostev.paul.paginglibrarytry.R;
 import ph.hostev.paul.paginglibrarytry.model.Model;
 
 @SuppressLint("DefaultLocale")
-public class ListAdapter extends PagedListAdapter<Model, ListAdapter.ViewHolder> {
+public abstract class ListAdapter<Holder extends ListAdapter.ViewHolder> extends PagedListAdapter<Model, Holder> {
+    protected static final String TAG = ListAdapter.class.getCanonicalName();
 
-    public ListAdapter() {
+    public static ListAdapter getInstance(@NonNull String dataSource) {
+        ListAdapter adapter = null;
+        switch (dataSource) {
+            case "PageKeyedDataSource":
+                adapter = new PageKeyedAdapter();
+                break;
+            case "PositionalDataSource":
+                adapter = new PositionalAdapter();
+                break;
+            case "ItemKeyedDataSource":
+                adapter = new ItemKeyedAdapter();
+                break;
+        }
+        return adapter;
+    }
+
+    ListAdapter() {
         super(new DiffUtil.ItemCallback<Model>() {
             @Override
             public boolean areItemsTheSame(@NonNull Model model, @NonNull Model t1) {
@@ -33,24 +52,29 @@ public class ListAdapter extends PagedListAdapter<Model, ListAdapter.ViewHolder>
     }
 
     @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(
-                LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false)
-        );
+    protected View itemLayout(ViewGroup viewGroup) {
+        return LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        Model model = getItem(i);
-        if (model != null) {
-            holder.name.setText(String.format("%d key=%d %s", i + 1, model.getKey(), model.getName()));
-        } else {
-            holder.name.setText("... .... ... ...");
+    public void onBindViewHolder(@NonNull Holder holder, int i) {
+        Model model = null;
+        try {
+            model = getItem(i);
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(TAG, e.getMessage());
+        } finally {
+            if (model != null) {
+                holder.build(model, i);
+            } else {
+                holder.placeholder();
+            }
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public abstract class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.item_progress)
+        ProgressBar progressBar;
         @BindView(R.id.item_name)
         TextView name;
 
@@ -58,5 +82,9 @@ public class ListAdapter extends PagedListAdapter<Model, ListAdapter.ViewHolder>
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        public abstract void build(Model model, int position);
+
+        public abstract void placeholder();
     }
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     @BindView(R.id.list)
     RecyclerView recyclerView;
+    @BindView(R.id.progress)
+    ProgressBar progressBar;
     @Nullable
     ListAdapter adapter;
     @NonNull
@@ -56,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
 
         if (recyclerView != null) {
-            adapter = new ListAdapter();
             recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            recyclerView.setAdapter(adapter);
         }
 
         config = new PagedList.Config.Builder().setEnablePlaceholders(true)
@@ -84,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(item -> {
             try {
-                String name = ModelDataSourceFactory.class.getPackage().getName() + ".Model" + String.valueOf(item.getTitle());
+                String itemTitle = String.valueOf(item.getTitle());
+                progressBar.setVisibility(View.VISIBLE);
+                String name = ModelDataSourceFactory.class.getPackage().getName() + ".Model" + itemTitle;
                 recyclerView.setAdapter(null);
-                adapter = new ListAdapter();
+                adapter = ListAdapter.getInstance(itemTitle);
                 recyclerView.setAdapter(adapter);
                 listFlowable = pagedListFlowable(Class.forName(name));
                 button.setText(item.getTitle());
@@ -95,7 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, e.getMessage() + '\n' + e.getException());
             } finally {
                 if (adapter != null) {
-                    addForDispose(listFlowable.subscribe(adapter::submitList, this::onError));
+                    addForDispose(listFlowable.subscribe(list -> {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    adapter.submitList(list);
+                                                }, this::onError)
+                    );
                 }
             }
             return true;

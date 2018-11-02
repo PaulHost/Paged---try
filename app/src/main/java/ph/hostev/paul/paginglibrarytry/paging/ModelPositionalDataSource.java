@@ -23,4 +23,9 @@ public class ModelPositionalDataSource extends PositionalDataSource<Model> {
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<Model> callback) {
         callback.onResult(MockUtil.mockPositional(params.startPosition, params.loadSize, totalCount));
     }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+    }
 }

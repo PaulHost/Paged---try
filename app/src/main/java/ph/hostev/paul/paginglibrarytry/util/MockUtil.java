@@ -16,6 +16,7 @@ public final class MockUtil {
     @NonNull
     public static List<Model> mockPageKeyed(int page) {
         List<Model> models = new ArrayList<>();
+        sleepThread();
         for (int i = 1; i < 101; i++) {
             models.add(new Model(Integer.parseInt("" + page + i), "page=" + page + " item=" + i));
         }
@@ -26,11 +27,7 @@ public final class MockUtil {
     public static List<Model> mockPositional(int position, int loadSize, int total) {
         Log.d(TAG, "position=" + position + " loadSize=" + loadSize + " total=" + total);
         List<Model> models = new ArrayList<>();
-        try {
-            Thread.sleep(SLEEP);
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage());
-        }
+        sleepThread();
         int gap = position + loadSize;
         for (; position < gap && position < total; position++) {
             models.add(new Model(position, "total=" + total));
@@ -47,11 +44,7 @@ public final class MockUtil {
     public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
         Log.d(TAG, "nextKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
-        try {
-            Thread.sleep(SLEEP);
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage());
-        }
+        sleepThread();
         for (; models.size() < requestedLoadSize && key < 501; key++) {
             models.add(new Model(key, " item=" + key));
         }
@@ -77,5 +70,13 @@ public final class MockUtil {
         );
         Collections.reverse(models);
         return models;
+    }
+
+    private static void sleepThread() {
+        try {
+            Thread.sleep(SLEEP);
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 }
