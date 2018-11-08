@@ -1,6 +1,6 @@
 package ph.hostev.paul.paginglibrarytry.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ public final class MockUtil {
 
     @NonNull
     public static List<Model> mockPositional(int position, int loadSize, int total) {
-        Log.d(TAG, "position=" + position + " loadSize=" + loadSize + " total=" + total);
         List<Model> models = new ArrayList<>();
         sleepThread();
         int gap = position + loadSize;
@@ -42,7 +41,6 @@ public final class MockUtil {
 
     @NonNull
     public static List<Model> mockItemKeyedAfter(Integer key, int requestedLoadSize) {
-        Log.d(TAG, "nextKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
         sleepThread();
         for (; models.size() < requestedLoadSize && key < 501; key++) {
@@ -58,7 +56,6 @@ public final class MockUtil {
 
     @NonNull
     public static List<Model> mockItemKeyedBefore(Integer key, int requestedLoadSize) {
-        Log.d(TAG, "prevKey=" + key + " requestedLoadSize=" + requestedLoadSize);
         List<Model> models = new ArrayList<>();
         for (; key > 1 && models.size() < requestedLoadSize + 1; key--) {
             models.add(new Model(key, " item=" + key));

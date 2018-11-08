@@ -1,7 +1,7 @@
 package ph.hostev.paul.paginglibrarytry.paging;
 
-import android.arch.paging.DataSource;
-import android.support.annotation.NonNull;
+import androidx.paging.DataSource;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.lang.reflect.Constructor;
@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import ph.hostev.paul.paginglibrarytry.model.Model;
 
 public class ModelDataSourceFactory<Key> extends DataSource.Factory<Key, Model> {
+
     @NonNull
     private Class<? extends DataSource> dataSource;
 
